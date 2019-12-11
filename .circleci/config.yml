@@ -53,8 +53,6 @@ jobs:
       - save_cache:
           key: v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
           paths:
-            - ~/.mix
-            - deps
             - _build
 
       - persist_to_workspace:
@@ -97,7 +95,6 @@ jobs:
           key: v1-plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
           paths:
             - ~/.mix
-            - deps
             - _build
       - run: mix dialyzer --no-check
 
