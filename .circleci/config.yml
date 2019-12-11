@@ -13,11 +13,11 @@ jobs:
     steps:
       - checkout
 
-      - run: echo "${ELIXIR_VERSION}-otp-${OTP_VERSION}" | tee ~/.elixir_version
+      - run: echo "${elixir-version}-otp-${OTP_VERSION}" | tee ~/.elixir-version
       - restore_cache:
           keys:
-            - mix-cache-{{ checksum "~/.elixir_version" }}-{{ .Environment.CIRCLE_SHA1 }}
-            - mix-cache-{{ checksum "~/.elixir_version" }}
+            - mix-cache-{{ checksum "~/.elixir-version" }}-{{ .Environment.CIRCLE_SHA1 }}
+            - mix-cache-{{ checksum "~/.elixir-version" }}
 
       - run: mix local.hex --force --if-missing
       - run: mix local.rebar --force --if-missing
@@ -25,40 +25,40 @@ jobs:
       - run: mix archive.check || mix archive.install hex credo '~> 1.1' --force
 
       - save_cache:
-          key: mix-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: mix-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/.mix
 
       - restore_cache:
           keys:
-            - deps-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
-            - deps-cache-{{ checksum "~/.elixir_version" }}
+            - deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
+            - deps-cache-{{ checksum "~/.elixir-version" }}
 
       - run: mix do deps.get
 
       - save_cache:
-          key: deps-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
+          key: deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
           paths:
             - deps
 
       - restore_cache:
           keys:
-            - build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
-            - build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
-            - build-cache-{{ checksum "~/.elixir_version" }}
+            - build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+            - build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
+            - build-cache-{{ checksum "~/.elixir-version" }}
 
       - run: mix deps.compile
       - run: mix compile
 
       - save_cache:
-          key: build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - _build
 
       - persist_to_workspace:
           root: ~/
           paths:
-            - .elixir_version
+            - .elixir-version
             - .mix
 
   format:
@@ -82,16 +82,16 @@ jobs:
           at: ~/
       - checkout
       - restore_cache:
-          key: deps-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
+          key: deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
           keys:
-            - plt-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
-            - plt-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
-            - plt-cache-{{ checksum "~/.elixir_version" }}
-            - build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+            - plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+            - plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
+            - plt-cache-{{ checksum "~/.elixir-version" }}
+            - build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
       - run: mix dialyzer --halt-exit-status
       - save_cache:
-          key: plt-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/.mix
             - _build
@@ -103,9 +103,9 @@ jobs:
           at: ~/
       - checkout
       - restore_cache:
-          key: deps-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
+          key: deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
-          key: build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
       - run: mix coveralls.html
       - store_test_results:
           path: _build/test/lib/poison
@@ -119,9 +119,9 @@ jobs:
           at: ~/
       - checkout
       - restore_cache:
-          key: deps-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}
+          key: deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
-          key: build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
       - run: mix docs
       - store_artifacts:
           path: doc
@@ -137,9 +137,9 @@ workflows:
       - credo:
           requires:
             - build
-      # - dialyzer:
-      #     requires:
-      #       - build
+      - dialyzer:
+          requires:
+            - build
       - test:
           requires:
             - build
