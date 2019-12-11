@@ -106,8 +106,8 @@ jobs:
       - checkout
       - restore_cache:
           key: v1-deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
-      - restore_cache:
-          key: v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
+      # - restore_cache:
+      #     key: v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
       - run: mix coveralls.html
       - store_test_results:
           path: _build/test/lib/poison
