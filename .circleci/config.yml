@@ -21,8 +21,8 @@ jobs:
 
       - run: mix local.hex --force --if-missing
       - run: mix local.rebar --force --if-missing
-      - run: mix archive.check || mix archive.install hex bunt '~> 0.2' --force
-      - run: mix archive.check || mix archive.install hex credo '~> 1.1' --force
+      - run: mix archive.check 2> /dev/null || mix archive.install hex bunt '~> 0.2' --force
+      - run: mix archive.check 2> /dev/null || mix archive.install hex credo '~> 1.1' --force
 
       - save_cache:
           key: mix-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
@@ -89,12 +89,13 @@ jobs:
             - plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
             - plt-cache-{{ checksum "~/.elixir-version" }}
             - build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
-      - run: mix dialyzer --halt-exit-status
+      - run: mix dialyzer --plt
       - save_cache:
           key: plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/.mix
             - _build
+      - run: mix dialyzer --no-check
 
   test:
     executor: elixir
