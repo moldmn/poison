@@ -16,43 +16,25 @@ jobs:
       - run: echo "${ELIXIR_VERSION}-otp-${OTP_VERSION}" | tee ~/.elixir-version
       - restore_cache:
           keys:
-            - v1-mix-cache-{{ checksum "~/.elixir-version" }}-{{ .Revision }}
-            - v1-mix-cache-{{ checksum "~/.elixir-version" }}
-
-      - run: mix local.hex --force --if-missing
-      - run: mix local.rebar --force --if-missing
-      - run: mix archive.check 2> /dev/null || mix archive.install hex bunt '~> 0.2' --force
-      - run: mix archive.check 2> /dev/null || mix archive.install hex credo '~> 1.1' --force
-
-      - save_cache:
-          key: v1-mix-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
-          paths:
-            - ~/.mix
-
-      - restore_cache:
-          keys:
-            - v1-deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
-            - v1-deps-cache-{{ checksum "~/.elixir-version" }}
-
-      - run: mix do deps.get
-
-      - save_cache:
-          key: v1-deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
-          paths:
-            - deps
-
-      - restore_cache:
-          keys:
             - v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
             - v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
             - v1-build-cache-{{ checksum "~/.elixir-version" }}
 
+      - run: mix local.hex --force --if-missing
+      - run: mix local.rebar --force --if-missing
+
+      - run: mix archive.check 2> /dev/null || mix archive.install hex bunt '~> 0.2' --force
+      - run: mix archive.check 2> /dev/null || mix archive.install hex credo '~> 1.1' --force
+
+      - run: mix deps.get
       - run: mix deps.compile
       - run: mix compile
 
       - save_cache:
           key: v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
           paths:
+            - ~/.mix
+            - deps
             - _build
 
       - persist_to_workspace:
@@ -83,8 +65,6 @@ jobs:
           at: ~/
       - checkout
       - restore_cache:
-          key: v1-deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
-      - restore_cache:
           keys:
             - v1-plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
             - v1-plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
@@ -95,6 +75,7 @@ jobs:
           key: v1-plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
           paths:
             - ~/.mix
+            - deps
             - _build
       - run: mix dialyzer --no-check
 
@@ -104,8 +85,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - checkout
-      - restore_cache:
-          key: v1-deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
           key: v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
       - run: mix coveralls.html
@@ -120,8 +99,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - checkout
-      - restore_cache:
-          key: v1-deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
           key: v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
       - run: mix docs
