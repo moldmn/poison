@@ -4,8 +4,8 @@ executors:
   elixir:
     docker:
       - image: circleci/elixir:1.9.4
-        environment:
-          MIX_ENV: test
+    environment:
+      MIX_ENV: test
 
 jobs:
   build:
@@ -34,7 +34,7 @@ jobs:
             - deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
             - deps-cache-{{ checksum "~/.elixir-version" }}
 
-      - run: MIX_ENV=test mix do deps.get
+      - run: mix do deps.get
 
       - save_cache:
           key: deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
@@ -47,8 +47,8 @@ jobs:
             - build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
             - build-cache-{{ checksum "~/.elixir-version" }}
 
-      - run: MIX_ENV=test mix deps.compile
-      - run: MIX_ENV=test mix compile
+      - run: mix deps.compile
+      - run: mix compile
 
       - save_cache:
           key: build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
@@ -107,7 +107,7 @@ jobs:
           key: deps-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
           key: build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
-      - run: MIX_ENV=test mix coveralls.html
+      - run: mix coveralls.html
       - store_test_results:
           path: _build/test/lib/poison
       - store_artifacts:
