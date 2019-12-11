@@ -15,7 +15,7 @@ defmodule Poison.Mixfile do
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: not (Mix.env() in [:dev, :test]),
       elixirc_paths: elixirc_paths(),
-      archives: archives(),
+      # archives: archives(),
       deps: deps(),
       package: package(),
       dialyzer: [
@@ -59,12 +59,12 @@ defmodule Poison.Mixfile do
     end
   end
 
-  defp archives do
-    [
-      {:bunt, "~> 0.1"},
-      {:credo, "~> 1.1"}
-    ]
-  end
+  # defp archives do
+  #   [
+  #     {:bunt, "~> 0.1"},
+  #     {:credo, "~> 1.1"}
+  #   ]
+  # end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
