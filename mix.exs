@@ -68,11 +68,11 @@ defmodule Poison.Mixfile do
       {:benchee, "~> 1.0", only: :bench},
       {:benchee_json, "~> 1.0", only: :bench},
       {:benchee_html, "~> 1.0", only: :bench},
-      {:exjsx, "~> 4.0", only: [:test, :bench, :profile]},
+      {:exjsx, "~> 4.0", only: [:bench, :profile]},
       {:jason, "~> 1.1", only: [:test, :bench, :profile]},
-      {:jiffy, "~> 1.0", only: [:test, :bench, :profile]},
-      {:json, "~> 1.3", only: [:test, :bench, :profile]},
-      {:jsone, "~> 1.5", only: [:test, :bench, :profile]},
+      {:jiffy, "~> 1.0", only: [:bench, :profile]},
+      {:json, "~> 1.3", only: [:bench, :profile]},
+      {:jsone, "~> 1.5", only: [:bench, :profile]},
       {:junit_formatter, "~> 3.0", only: :test}
     ]
   end
