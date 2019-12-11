@@ -11,11 +11,6 @@ jobs:
   build:
     executor: elixir
     steps:
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - .mix
-
       - checkout
 
       - run: echo "${ELIXIR_VERSION}-otp-${OTP_VERSION}" | tee ~/.elixir_version
@@ -59,6 +54,11 @@ jobs:
           key: build-cache-{{ checksum "~/.elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - _build
+
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .mix
 
   format:
     executor: elixir
