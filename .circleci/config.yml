@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
 
-      - run: echo "${elixir-version}-otp-${OTP_VERSION}" | tee ~/.elixir-version
+      - run: echo "${ELIXIR_VERSION}-otp-${OTP_VERSION}" | tee ~/.elixir-version
       - restore_cache:
           keys:
             - mix-cache-{{ checksum "~/.elixir-version" }}-{{ .Environment.CIRCLE_SHA1 }}
