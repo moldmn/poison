@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
 
-      - run: echo "${ELIXIR_VERSION}-otp-${OTP_VERSION}" | tee ~/.elixir-version
+      - run: elixir -e 'IO.binwrite("#{System.version}-otp-#{:erlang.system_info(:otp_release)}")' | tee -i ~/.elixir-version
       - restore_cache:
           keys:
             - v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
@@ -56,7 +56,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - checkout
-      - run: mix credo --strict
+      - run: mix credo
 
   dialyzer:
     executor: elixir
