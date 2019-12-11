@@ -15,18 +15,10 @@ jobs:
 
       - run: echo "${ELIXIR_VERSION}-otp-${OTP_VERSION}" | tee /tmp/elixir_version
 
-      - restore_cache:
-          key: mix-cache-{{ checksum "/tmp/elixir_version" }}
-
       - run: mix local.hex --force
       - run: mix local.rebar --force
       - run: mix archive.install hex bunt '~> 0.2' --force
       - run: mix archive.install hex credo '~> 1.1' --force
-
-      - save_cache:
-          key: mix-cache-{{ checksum "/tmp/elixir_version" }}
-          paths:
-            - ~/.mix
 
       - restore_cache:
           keys:
@@ -48,6 +40,7 @@ jobs:
 
       - run: mix deps.compile
       - run: mix compile
+
       - save_cache:
           key: build-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -78,19 +71,15 @@ jobs:
       - restore_cache:
           key: deps-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}
       - restore_cache:
-          key: build-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
           keys:
             - plt-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
-            - plt-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}
-            - plt-cache-{{ checksum "/tmp/elixir_version" }}
-      - run: mix dialyzer --plt
+            - build-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
+      - run: mix dialyzer --halt-exit-status
       - save_cache:
           key: plt-cache-{{ checksum "/tmp/elixir_version" }}-{{ checksum "mix.lock" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/.mix
             - _build
-      - run: mix dialyzer --halt-exit-status
 
   test:
     executor: elixir
