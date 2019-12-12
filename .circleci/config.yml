@@ -68,7 +68,6 @@ jobs:
           keys:
             - v1-plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
             - v1-plt-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-
-            - v1-plt-cache-{{ checksum "~/.elixir-version" }}-
             - v1-build-cache-{{ checksum "~/.elixir-version" }}-{{ checksum "mix.lock" }}-{{ .Revision }}
       - run: mix dialyzer --plt
       - save_cache:
