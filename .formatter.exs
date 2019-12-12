@@ -2,7 +2,7 @@
 [
   inputs: [
     "{mix,.credo,.formatter}.exs",
-    "{config,lib,test,bench}/**/*.{ex,exs}"
+    "{config,lib,test,bench,profile}/**/*.{ex,exs}"
   ],
   line_length: 120
 ]

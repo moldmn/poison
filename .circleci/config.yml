@@ -23,9 +23,6 @@ jobs:
       - run: mix local.hex --force --if-missing
       - run: mix local.rebar --force --if-missing
 
-      - run: mix archive.install hex bunt '~> 0.2' --force
-      - run: mix archive.install hex credo '~> 1.1' --force
-
       - run: mix deps.get
       - run: mix deps.compile
       - run: mix compile

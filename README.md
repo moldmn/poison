@@ -160,8 +160,10 @@ $ MIX_ENV=bench mix run bench/run.exs
 
 ### Current Benchmarks
 
-As of 2019-12-11 on an Amazon EC2 c5n.2xlarge instance:
-https://gist.github.com/devinus/e0af1d75d70146e5d89b5e308edd1abd
+As of 2019-12-11:
+
+- Amazon EC2 c5n.2xlarge instance running Ubuntu Server 18.04:
+  https://gist.github.com/devinus/e0af1d75d70146e5d89b5e308edd1abd
 
 ## License
 

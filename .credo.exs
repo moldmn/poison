@@ -21,7 +21,7 @@
         # You can give explicit globs or simply directories.
         # In the latter case `**/*.{ex,exs}` will be used.
         #
-        included: ["lib/", "src/", "test/", "web/", "apps/"],
+        included: ["lib/", "src/", "test/", "web/", "apps/", "bench/", "profile/"],
         excluded: [~r"/_build/", ~r"/deps/", ~r"/node_modules/"]
       },
       #
@@ -139,7 +139,7 @@
         # Controversial and experimental checks (opt-in, just replace `false` with `[]`)
         #
         {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
-        {Credo.Check.Consistency.UnusedVariableNames, []},
+        {Credo.Check.Consistency.UnusedVariableNames, false},
         {Credo.Check.Design.DuplicatedCode, []},
         {Credo.Check.Readability.AliasAs, []},
         {Credo.Check.Readability.MultiAlias, false},

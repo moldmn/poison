@@ -23,5 +23,4 @@ erl_crash.dump
 poison-*.tar
 
 .elixir_ls
-/benchmarks/
 /bench/output/
