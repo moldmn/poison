@@ -167,7 +167,9 @@ As of 2019-12-11:
 
 ## License
 
-Poison is released under [CC0-1.0][8].
+Poison is released into the public domain (see `LICENSE`).
+Poison is also optionally available under the [CC0-1.0][8] license,
+meant especially for jurisdictions that do not recognize public domain works.
 
 [1]: http://www.erlang.org/euc/07/papers/1700Gustafsson.pdf
 [2]: http://www.erlang.org/workshop/2003/paper/p36-sagonas.pdf

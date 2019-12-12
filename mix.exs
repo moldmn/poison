@@ -9,6 +9,7 @@ defmodule Poison.Mixfile do
   def project do
     [
       app: :poison,
+      name: "Poison",
       version: @version,
       elixir: "~> 1.8",
       description: "An incredibly fast, pure Elixir JSON library",
@@ -17,6 +18,7 @@ defmodule Poison.Mixfile do
       consolidate_protocols: not (Mix.env() in [:dev, :test]),
       elixirc_paths: elixirc_paths(),
       deps: deps(),
+      docs: docs(),
       package: package(),
       dialyzer: [
         ignore_warnings: "dialyzer.ignore-warnings",
@@ -62,27 +64,35 @@ defmodule Poison.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:benchee_html, "~> 1.0", only: :bench},
-      {:benchee, "~> 1.0", only: :bench},
+      {:benchee_html, "~> 1.0", only: :bench, runtime: false},
+      {:benchee, "~> 1.0", only: :bench, runtime: false},
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
       {:decimal, "~> 1.8", optional: true},
       {:dialyxir, "~> 1.0.0-rc", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.21", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.12", only: :test},
-      {:exjsx, "~> 4.0", only: [:bench, :profile]},
-      {:jason, "~> 1.1", only: [:dev, :test, :bench, :profile]},
-      {:jiffy, "~> 1.0", only: [:bench, :profile]},
-      {:json, "~> 1.3", only: [:bench, :profile]},
-      {:jsone, "~> 1.5", only: [:bench, :profile]},
-      {:junit_formatter, "~> 3.0", only: :test}
+      {:excoveralls, "~> 0.12", only: :test, runtime: false},
+      {:exjsx, "~> 4.0", only: [:bench, :profile], runtime: false},
+      {:jason, "~> 1.1", only: [:dev, :test, :bench, :profile], runtime: false},
+      {:jiffy, "~> 1.0", only: [:bench, :profile], runtime: false},
+      {:json, "~> 1.3", only: [:bench, :profile], runtime: false},
+      {:jsone, "~> 1.5", only: [:bench, :profile], runtime: false},
+      {:junit_formatter, "~> 3.0", only: :test, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Poison",
+      canonical: "https://hexdocs.pm/poison",
+      extras: ["README.md"]
     ]
   end
 
   defp package do
     [
       files: ~w(lib mix.exs README.md LICENSE VERSION),
-      maintainers: ["Devin Alexander Torres"],
-      licenses: ["CC0-1.0"],
+      maintainers: ["Devin Alexander Torres <d@devinus.io>"],
+      licenses: ["Unlicense", "CC0-1.0"],
       links: %{"GitHub" => "https://github.com/devinus/poison"}
     ]
   end

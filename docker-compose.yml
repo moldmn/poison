@@ -1,11 +1,12 @@
 version: "3.7"
 services:
-  app:
+  project:
     build:
       context: .
       args:
         MIX_ENV: test
     volumes:
-      - .:/usr/src/app:cached
-      - /usr/src/app/deps
-      - /usr/src/app/_build
+      - .:/usr/src/project:cached
+      - /usr/src/project/deps
+      - /usr/src/project/_build
+    init: true
