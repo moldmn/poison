@@ -1,4 +1,5 @@
 dist: bionic
+sudo: false
 language: elixir
 elixir:
   - 1.9.4
@@ -10,13 +11,14 @@ elixir:
   - 1.8.1
   - 1.8.0
 otp_release:
+  - 22.2
   - 22.1
   - 22.0
   - 21.3
   - 21.2
   - 21.1
   - 21.0
-sudo: false
+before_script: git submodule update --init
 matrix:
   include:
     - install:

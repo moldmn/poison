@@ -228,7 +228,7 @@ end
 
 defimpl Poison.Encoder, for: Float do
   def encode(float, _options) do
-    :io_lib_format.fwrite_g(float)
+    Float.to_string(float)
   end
 end
 

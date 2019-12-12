@@ -12,10 +12,11 @@ defmodule Poison.Mixfile do
       version: @version,
       elixir: "~> 1.8",
       description: "An incredibly fast, pure Elixir JSON library",
+      source_url: "https://github.com/devinus/poison",
+      homepage_url: "https://hexdocs.pm/poison",
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: not (Mix.env() in [:dev, :test]),
       elixirc_paths: elixirc_paths(),
-      # archives: archives(),
       deps: deps(),
       package: package(),
       dialyzer: [
@@ -58,13 +59,6 @@ defmodule Poison.Mixfile do
       ["lib"]
     end
   end
-
-  # defp archives do
-  #   [
-  #     {:bunt, "~> 0.1"},
-  #     {:credo, "~> 1.1"}
-  #   ]
-  # end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
