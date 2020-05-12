@@ -63,6 +63,47 @@ defmodule Poison.Pretty do
   end
 end
 
+defmodule Poison.Mutate do
+  defmacro __using__(_) do
+    quote do
+      defp mutate_shuffle(keys, options) do
+        case Keyword.get(options, :mutate_shuffle) do
+          nil -> keys
+          _ -> keys |> Enum.shuffle
+        end
+      end
+
+      defp mutate_quote(options) do
+        case Keyword.get(options, :mutate_quote) do
+          nil -> ?"
+          _ -> ?'
+        end
+      end
+
+      defp mutate_capitalize([s]=string,options) do
+        case Keyword.get(options, :mutate_capitalize) do
+          nil -> string
+          _ -> String.capitalize(s)
+        end
+      end
+
+      defp mutate_double_key(keys, options) do
+        case Keyword.get(options, :mutate_double_key) do
+          nil -> keys
+          _ -> keys ++ [Enum.random(keys)]
+        end
+      end
+
+      defp mutate_lost_key(keys, options) do
+        case Keyword.get(options, :mutate_lost_key) do
+          nil -> keys
+          _ -> keys -- [Enum.random(keys)]
+        end
+      end
+    end
+  end
+end
+
 defprotocol Poison.Encoder do
   @fallback_to_any true
 
@@ -81,11 +122,17 @@ end
 
 defimpl Poison.Encoder, for: BitString do
   use Bitwise
+  use Poison.Mutate
 
   def encode("", _), do: "\"\""
 
   def encode(string, options) do
     [?", escape(string, options[:escape]), ?"]
+  end
+
+  def encode_key(string, options) do
+    quote = mutate_quote(options)
+    [quote, escape(string, options[:escape]) |> mutate_capitalize(options), quote]
   end
 
   defp escape("", _), do: []
@@ -198,6 +245,7 @@ defimpl Poison.Encoder, for: Map do
 
   use Poison.Pretty
   use Poison.Encode
+  use Poison.Mutate
 
   # TODO: Remove once we require Elixir 1.1+
   defmacro __deriving__(module, struct, options) do
@@ -217,15 +265,15 @@ defimpl Poison.Encoder, for: Map do
     offset = offset(options) + indent
     options = offset(options, offset)
 
-    fun = &[",\n", spaces(offset), Encoder.BitString.encode(encode_name(&1), options), ": ",
+    fun = &[",\n", spaces(offset), Encoder.BitString.encode_key(encode_name(&1), options), ": ",
                                    Encoder.encode(:maps.get(&1, map), options) | &2]
-    ["{\n", tl(:lists.foldl(fun, [], :maps.keys(map))), ?\n, spaces(offset - indent), ?}]
+    ["{\n", tl(:lists.foldl(fun, [], :maps.keys(map) |> mutate_shuffle(options) |> mutate_double_key(options) |> mutate_lost_key(options) )), ?\n, spaces(offset - indent), ?}]
   end
 
   def encode(map, _, options) do
-    fun = &[?,, Encoder.BitString.encode(encode_name(&1), options), ?:,
+    fun = &[?,, Encoder.BitString.encode_key(encode_name(&1), options), ?:,
                 Encoder.encode(:maps.get(&1, map), options) | &2]
-    [?{, tl(:lists.foldl(fun, [], :maps.keys(map))), ?}]
+    [?{, tl(:lists.foldl(fun, [], :maps.keys(map) |> mutate_shuffle(options) |> mutate_double_key(options) |> mutate_lost_key(options)  )), ?}]
   end
 
   defp strict_keys(map, false), do: map
