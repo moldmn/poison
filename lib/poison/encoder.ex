@@ -97,7 +97,8 @@ defmodule Poison.Mutate do
       defp mutate_lost_key(keys, options) do
         case Keyword.get(options, :mutate_lost_key) do
           nil -> keys
-          _ -> keys -- [Enum.random(keys)]
+          _ when length(keys) > 1 -> keys -- [Enum.random(keys)]
+          _ -> keys
         end
       end
     end
